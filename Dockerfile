@@ -6,8 +6,8 @@
 # modified files (SystemLog.php, PaymentLibrariesSeeder.php) line up exactly.
 FROM invoiceninja/invoiceninja:5.13.24
 
-# Application root inside the official image.
-ARG APP_DIR=/var/www/html
+# Application root inside the official image (confirmed from runtime stack traces).
+ARG APP_DIR=/var/www/app
 
 # Overlay only the PayHere-related files onto the baked-in application.
 COPY --chown=www-data:www-data app/Models/SystemLog.php                                       ${APP_DIR}/app/Models/SystemLog.php
