@@ -1,8 +1,11 @@
 # Invoice Ninja + PayHere — Dokploy Compose stack (fresh install).
 #
-# Deploy this as a "Compose" application in Dokploy. Paste the full env (see
-# .env.dokploy.example) into the Dokploy "Environment" tab — Dokploy writes it
-# to a .env next to this file, which the app service loads via env_file.
+# The official invoiceninja image is php-fpm only (listens on 9000, FastCGI),
+# so a separate nginx service ("web") serves HTTP and proxies PHP to app:9000.
+# Point the Dokploy domain at service "web", port 80.
+#
+# Paste the full env (see .env.dokploy.example) into the Dokploy "Environment"
+# tab — Dokploy writes it to a .env next to this file, loaded via env_file.
 
 services:
   app:
@@ -15,10 +18,22 @@ services:
       - redis
     env_file: .env
     expose:
-      - "80"
+      - "9000"
     volumes:
       - in_public:/var/www/app/public
       - in_storage:/var/www/app/storage
+
+  web:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    expose:
+      - "80"
+    volumes:
+      - in_public:/var/www/app/public:ro
+      - in_storage:/var/www/app/storage:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
 
   db:
     image: mysql:8
