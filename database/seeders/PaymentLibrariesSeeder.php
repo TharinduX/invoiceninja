@@ -94,6 +94,7 @@ class PaymentLibrariesSeeder extends Seeder
             ['id' => 65, 'name' => 'Blockonomics', 'is_offsite' => false, 'sort_order' => 27, 'provider' => 'Blockonomics', 'key' => 'wbhf02us6owgo7p4nfjd0ymssdshks4d', 'fields' => '{"apiKey":""}'],
             ['id' => 66, 'name' => 'LawPay', 'is_offsite' => false, 'sort_order' => 28, 'provider' => 'LawPay', 'key' => 'f4lafbnygsmkflagbqp7zqnfpgeoekdn', 'fields' => '{"publicKey":"","secretKey":"","testMode":false}'],
             ['id' => 67, 'name' => 'payware', 'is_offsite' => false, 'sort_order' => 29, 'provider' => 'Payware', 'key' => 'b0a6294fca4488c2bab58f3e11e3c623', 'fields' => '{"partnerId":"","vposId":"","paywarePublicKey":"","testMode":false,"timeToLive":"600"}', 'default_gateway_type_id' => 30],
+            ['id' => 68, 'name' => 'PayHere', 'is_offsite' => true, 'sort_order' => 30, 'provider' => 'PayHere', 'key' => '8e75ceb21ac6153ef90da3ff7f5cffce', 'fields' => '{"merchantId":"","merchantSecret":"","testMode":false}', 'default_gateway_type_id' => GatewayType::CREDIT_CARD],
         ];
 
         foreach ($gateways as $gateway) {
@@ -110,7 +111,7 @@ class PaymentLibrariesSeeder extends Seeder
 
         Gateway::query()->update(['visible' => 0]);
 
-        Gateway::whereIn('id', [1, 3, 7, 11, 15, 20, 39, 46, 55, 50, 57, 52, 58, 59, 60, 62, 63, 67])->update(['visible' => 1]);
+        Gateway::whereIn('id', [1, 3, 7, 11, 15, 20, 39, 46, 55, 50, 57, 52, 58, 59, 60, 62, 63, 67, 68])->update(['visible' => 1]);
 
         if (Ninja::isHosted()) {
             Gateway::whereIn('id', [20, 49])->update(['visible' => 0]);
