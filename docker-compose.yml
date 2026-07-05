@@ -1,0 +1,41 @@
+# Invoice Ninja + PayHere — Dokploy Compose stack (fresh install).
+#
+# Deploy this as a "Compose" application in Dokploy. Set the env values in the
+# Dokploy Environment tab (Dokploy writes them to a .env next to this file).
+# See .env.dokploy.example for the full list.
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+    env_file: .env
+    expose:
+      - "80"
+    volumes:
+      - in_public:/var/www/html/public
+      - in_storage:/var/www/html/storage
+
+  db:
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+volumes:
+  in_public:
+  in_storage:
+  db_data:
